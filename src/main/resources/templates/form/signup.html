@@ -78,7 +78,7 @@
 
                 <div class="mb-3">
                     <label for="region">지역</label>
-                    <select class="custom-select d-block w-100"  id="region">
+                    <select th:field="*{region}" class="custom-select d-block w-100"  id="region">
                         <option value="">지역 선택</option>
                         <option th:each="region : ${regions}" th:value="${region.key}"
                                 th:text="${region.value}">서울
