@@ -22,29 +22,27 @@ public class User {
     @Column(length = 10, nullable = false)
     private String name; // 이름
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 30, nullable = false, unique = true)
     private String email; // 이메일
 
     @Column(length = 10, nullable = false)
-    private String regions; // 지역
+    private String region; // 지역
 
     @Column(length = 400, nullable = false)
     private String password; // 패스워드
-
-    @Column(length = 400, nullable = false)
-    private String salt; // 암호화
 
     @CreatedDate
     private LocalDateTime createdAt; // 생성된 시간
     @LastModifiedDate
     private LocalDateTime updatedAt; // 업데이트된 시간
 
+
     @Builder
-    public User(Long id, String name, String email, String password) {
+    public User(Long id, String name, String email, String region, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.region = region;
         this.password = password;
-
     }
 }
