@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DateRecordController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @ModelAttribute("regions")
     public Map<String, String> regions() {
