@@ -2,10 +2,14 @@ package com.tophyuk.dateRecord.web;
 
 import com.tophyuk.dateRecord.domain.User;
 import com.tophyuk.dateRecord.service.UserService;
+import com.tophyuk.dateRecord.validation.form.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +24,7 @@ import java.util.Map;
 public class DateRecordController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @ModelAttribute("regions")
     public Map<String, String> regions() {
@@ -44,12 +49,30 @@ public class DateRecordController {
     }
 
     @PostMapping("/signup")
-    public String signupUser(@ModelAttribute User user) throws Exception {
-        log.info("user.name={}", user.getName());
-        log.info("user.region={}", user.getRegion());
-        log.info("user.email={}", user.getEmail());
-        log.info("user.password={}", user.getPassword());
+    public String signupUser(@Validated @ModelAttribute("user") SignupForm form ,BindingResult bindingResult) throws Exception {
 
+        User user = new User();
+        log.info("userForm class={}", form);
+        user.setName(form.getName());
+        user.setEmail(form.getEmail());
+        user.setRegion(form.getRegion());
+        //패스워드 암호화 후 적용
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
+
+        // binding 에러
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "/form/signup";
+        }
+
+        // 비밀번호, 비밀번호 확인이 같은지 확인
+        if (!form.getPassword().equals(form.getPassword2())) {
+            bindingResult.rejectValue("password", "passwordUnmatched",
+                    "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return "/form/signup";
+        }
+
+        // 정상 로직
         userService.save(user);
 
         return "redirect:/";

@@ -35,57 +35,69 @@
       -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
     }
+
+    .field-error {
+            border-color : #dc3545;
+            color: #dc3545;
+    }
   </style>
 </head>
 
 <body>
 <div class="container">
-    <div class="input-form-backgroud row">
+    <div class="input-form-background row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
-            <form th:class="validation-form" th:action th:object="${user}" method="post">
+            <form th:action th:object="${user}" method="post">
                 <div class="mb-3">
                     <label for="name">이름</label>
-                    <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="홍길동" required>
-                    <div class="invalid-feedback">
-                        이름을 입력해주세요.
+                    <input type="text" class="form-control" id="name"
+                           th:field="*{name}"
+                           th:errorclass="field-error" placeholder="홍길동" required>
+                    <div class="field-error" th:errors="*{name}">
+                        이름 오류
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="test@example.com" required>
-                    <div class="invalid-feedback">
-                        이메일을 입력해주세요.
+                    <input type="email" class="form-control" id="email"
+                           th:field="*{email}"
+                           th:errorclass="field-error"
+                           placeholder="test@example.com" required>
+                    <div class="field-error" th:errors="*{email}">
+                        이메일 오류
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="비밀번호를 입력하세요" required>
-                    <div class="invalid-feedback">
-                        비밀번호를 입력해주세요.
+                    <input type="password" class="form-control" id="password"
+                           th:field="*{password}"
+                           th:errorclass="field-error"
+                           placeholder="비밀번호를 입력하세요" required>
+                    <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        비밀번호 오류
                     </div>
                 </div>
-
                 <div class="mb-3">
-                    <label for="password_confirm">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="password_confirm" placeholder="비밀번호를 한 번 더 입력하세요" required>
-                    <div class="invalid-feedback">
-                        비밀번호 확인을 입력해주세요.
+                    <label for="password2">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="password2" placeholder="비밀번호를 한 번 더 입력하세요">
+                    <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        비밀번호 확인 오류
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="region">지역</label>
-                    <select th:field="*{region}" class="custom-select d-block w-100"  id="region">
+                    <select th:field="*{region}" th:errorclass="field-error" class="custom-select d-block w-100"  id="region" required>
                         <option value="">지역 선택</option>
                         <option th:each="region : ${regions}" th:value="${region.key}"
                                 th:text="${region.value}">서울
                         </option>
                     </select>
-                    <div class="invalid-feedback">
-                        가입 경로를 선택해주세요.
+                    <div class="field-error" th:errors="*{region}">
+                        지역 오류
                     </div>
                 </div>
                 <hr class="mb-4">
@@ -102,22 +114,6 @@
         <p class="mb-1">&copy; 2021 tophyuk</p>
     </footer>
 </div>
-<script>
-    window.addEventListener('load', () => {
-      const forms = document.getElementsByClassName('validation-form');
-
-      Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
-  </script>
 </body>
 
 </html>
