@@ -5,7 +5,6 @@ import com.tophyuk.dateRecord.service.UserService;
 import com.tophyuk.dateRecord.validation.form.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import java.util.Map;
 public class DateRecordController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @ModelAttribute("regions")
     public Map<String, String> regions() {
@@ -44,20 +42,14 @@ public class DateRecordController {
 
     @GetMapping("/signup")
     public String signup(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("signupForm", new SignupForm());
         return "/form/signup";
     }
 
     @PostMapping("/signup")
-    public String signupUser(@Validated @ModelAttribute("user") SignupForm form ,BindingResult bindingResult) throws Exception {
+    public String signupUser(@Validated SignupForm form ,BindingResult bindingResult) throws Exception {
+        log.info("form={}", form);
 
-        User user = new User();
-        log.info("userForm class={}", form);
-        user.setName(form.getName());
-        user.setEmail(form.getEmail());
-        user.setRegion(form.getRegion());
-        //패스워드 암호화 후 적용
-        user.setPassword(passwordEncoder.encode(form.getPassword()));
 
         // binding 에러
         if (bindingResult.hasErrors()) {
@@ -73,7 +65,7 @@ public class DateRecordController {
         }
 
         // 정상 로직
-        userService.save(user);
+        userService.save(form);
 
         return "redirect:/";
     }

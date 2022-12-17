@@ -17,15 +17,26 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     //사용자 전체 조회
     public List<User> getList() {
         return userRepository.findAll();
     }
 
     //사용자 등록
-    public void save(User user) {
+    public void save(SignupForm signupForm) {
+        // 사용자 등록
+        User user = new User();
+        log.info("userForm class={}", signupForm);
+        user.setName(signupForm.getName());
+        user.setEmail(signupForm.getEmail());
+        user.setRegion(signupForm.getRegion());
 
         //todo - 중복확인
+
+        //패스워드 암호화 후 적용
+        user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
 
         userRepository.save(user);
     }
