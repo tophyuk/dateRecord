@@ -1,10 +1,10 @@
 package com.tophyuk.dateRecord.web;
 
-import com.tophyuk.dateRecord.domain.User;
 import com.tophyuk.dateRecord.service.UserService;
 import com.tophyuk.dateRecord.validation.form.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,7 +47,7 @@ public class DateRecordController {
     }
 
     @PostMapping("/signup")
-    public String signupUser(@Validated SignupForm form ,BindingResult bindingResult) throws Exception {
+    public String signupUser(@Validated SignupForm form ,BindingResult bindingResult) {
         log.info("form={}", form);
 
 
@@ -65,7 +65,17 @@ public class DateRecordController {
         }
 
         // 정상 로직
-        userService.save(form);
+        try {
+            userService.save(form);
+        } catch ( DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.rejectValue("email" ,"signupFailed", "이미 등록된 이메일입니다.");
+            return "/form/signup";
+        }catch(Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "/form/signup";
+        }
 
         return "redirect:/";
     }
