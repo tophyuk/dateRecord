@@ -5,10 +5,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -30,11 +26,6 @@ public class User {
 
     @Column(length = 400, nullable = false)
     private String password; // 패스워드
-
-    @CreatedDate
-    private LocalDateTime createdAt; // 생성된 시간
-    @LastModifiedDate
-    private LocalDateTime updatedAt; // 업데이트된 시간
 
 
     @Builder
