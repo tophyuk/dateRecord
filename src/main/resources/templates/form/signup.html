@@ -65,7 +65,7 @@
                            th:field="*{email}"
                            th:errorclass="field-error"
                            placeholder="test@example.com" required>
-                    <div class="field-error" th:errors="*{email}">
+                    <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
                         이메일 오류
                     </div>
                 </div>
@@ -82,7 +82,10 @@
                 </div>
                 <div class="mb-3">
                     <label for="password2">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="password2" th:field="*{password2}" placeholder="비밀번호를 한 번 더 입력하세요">
+                    <input type="password" class="form-control" id="password2"
+                           th:field="*{password2}"
+                           th:errorclass="field-error"
+                           placeholder="비밀번호를 한 번 더 입력하세요">
                     <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
                         비밀번호 확인 오류
                     </div>

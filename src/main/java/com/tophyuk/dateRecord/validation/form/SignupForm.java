@@ -16,6 +16,7 @@ public class SignupForm {
     private String password;
 
     @Size(min = 8, max=18)
+    @NotEmpty(message = "비밀번호 확인는 필수항목입니다.")
     private String password2;
 
     @NotEmpty(message = "지역 선택은 필수항목입니다.")
