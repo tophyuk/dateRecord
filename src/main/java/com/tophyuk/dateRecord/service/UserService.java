@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,12 +34,14 @@ public class UserService {
         user.setEmail(signupForm.getEmail());
         user.setRegion(signupForm.getRegion());
 
-        //todo - 중복확인
-
         //패스워드 암호화 후 적용
         user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
 
         userRepository.save(user);
+    }
+
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
 
