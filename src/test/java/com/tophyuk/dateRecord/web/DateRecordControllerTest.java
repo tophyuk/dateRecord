@@ -3,6 +3,7 @@ package com.tophyuk.dateRecord.web;
 import com.tophyuk.dateRecord.domain.User;
 import com.tophyuk.dateRecord.repository.UserRepository;
 import com.tophyuk.dateRecord.service.UserService;
+import com.tophyuk.dateRecord.validation.form.SignupForm;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,13 @@ public class DateRecordControllerTest {
         String password ="wjdtkdgur";
 
         //when
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setRegion(region);
-        user.setPassword(password);
+        SignupForm form = new SignupForm();
+        form.setName(name);
+        form.setEmail(email);
+        form.setRegion(region);
+        form.setPassword(password);
 
-        userService.save(user);
+        userService.save(form);
 
         //then
         //User resultUser = userRepository.findByEmail(email);
